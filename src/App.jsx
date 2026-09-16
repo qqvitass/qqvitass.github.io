@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, BriefcaseBusiness, Check, ChevronDown, Clock3, Copy, FileText, GraduationCap, Image as ImageIcon, Layers3, Mail, Menu, Phone, Play, Sparkles, X } from "lucide-react";
+import { ArrowUpRight, BriefcaseBusiness, Check, Clock3, Copy, FileText, GraduationCap, Image as ImageIcon, Layers3, Mail, Menu, Phone, Sparkles, X } from "lucide-react";
 
 const works = {
   detail: { title: "鲜活水 Pro+ 详情页", type: "详情页设计", image: "/works/detail.webp", original: "/works/detail-original.jpg", process: "/works/process-detail.png" },
@@ -48,12 +48,30 @@ function Reveal({ children, className = "", delay = 0, amount = .12 }) {
 
 function Header() {
   const [open, setOpen] = useState(false);
-  const links = [["首页", "#home"], ["关于", "#about"], ["作品", "#works"], ["设计过程", "#process"], ["联系", "#contact"]];
+  const links = [["首页", "#home"], ["作品", "#works"], ["设计过程", "#process"], ["关于", "#about"], ["联系", "#contact"]];
   return <header className="site-header"><a className="monogram liquid-glass" href="#home" aria-label="返回首页">x</a><nav className="desktop-nav liquid-glass" aria-label="主要导航">{links.map(([label, href]) => <a key={label} href={href}>{label}</a>)}<a className="claim" href="#contact">联系我 <ArrowUpRight size={16} /></a></nav><span className="nav-balance" /><button className="mobile-menu liquid-glass" onClick={() => setOpen(!open)} aria-label={open ? "关闭导航" : "打开导航"} aria-expanded={open}>{open ? <X /> : <Menu />}</button>{open && <nav className="mobile-panel liquid-glass" aria-label="手机导航">{links.map(([label, href]) => <a key={label} href={href} onClick={() => setOpen(false)}>{label}</a>)}</nav>}</header>;
 }
 
 function Hero() {
-  return <section id="home" className="hero section-video"><FadingVideo src="/media/hero.mp4" className="hero-video" /><Header /><div className="hero-content"><Reveal delay={.35}><div className="badge liquid-glass"><span>徐德明</span><p>AI电商设计师 · AI E-commerce Designer</p></div></Reveal><h1><BlurText delay={.45}>让产品的价值</BlurText><br /><BlurText delay={.78}>被看见。</BlurText></h1><Reveal className="hero-copy" delay={.9}><p>从卖点梳理到视觉呈现，把商业需求转化为清晰、有吸引力的电商设计。</p></Reveal><Reveal className="hero-actions" delay={1.05}><a href="#works" className="primary liquid-glass-strong">查看精选作品 <ArrowUpRight size={19} /></a><a href="#process" className="text-action">了解设计过程 <Play size={14} fill="currentColor" /></a></Reveal><Reveal className="hero-stats" delay={1.2}><div className="stat liquid-glass"><Clock3 size={28} /><div><strong>9 年</strong><span>职场经验</span></div></div><div className="stat liquid-glass"><BriefcaseBusiness size={28} /><div><strong>4 年</strong><span>专注平面与电商视觉</span></div></div></Reveal></div><Reveal className="hero-footer" delay={1.35}><span className="liquid-glass">视觉策划 × AI视觉呈现 × 电商落地</span><div><i>Strategy</i><i>AI Visual</i><i>E-commerce</i><i>Brand</i></div></Reveal><a className="scroll-hint" href="#about" aria-label="向下查看个人介绍"><ChevronDown /></a></section>;
+  const showcase = [
+    ["/works/detail-01.webp", "海尔鲜活水详情页"],
+    ["/works/daily-01.webp", "海尔日常净水首页"],
+    ["/works/poster-2.webp", "海尔极光净水推广图"],
+    ["/works/campaign-kv.webp", "海尔双11分会场首屏"],
+  ];
+  return <section id="home" className="hero hero-work-led">
+    <Header />
+    <div className="hero-grid">
+      <div className="hero-content">
+        <Reveal delay={.1}><div className="badge"><span>徐德明</span><p>AI电商设计师</p></div></Reveal>
+        <h1><BlurText delay={.18}>视觉策划与AI场景</BlurText><br /><BlurText delay={.38}>驱动电商落地</BlurText></h1>
+        <Reveal className="hero-copy" delay={.52}><p>从需求、卖点和信息结构出发，让AI探索成为真正可落地的商业视觉。</p></Reveal>
+        <Reveal className="hero-actions" delay={.62}><a href="#works" className="primary">查看海尔项目 <ArrowUpRight size={19} /></a><a href="#about" className="text-action">认识徐德明</a></Reveal>
+        <Reveal className="hero-stats" delay={.7}><div className="stat"><Clock3 size={24} /><div><strong>9年</strong><span>职场经验</span></div></div><div className="stat"><BriefcaseBusiness size={24} /><div><strong>4年</strong><span>专注电商视觉</span></div></div></Reveal>
+      </div>
+      <Reveal className="hero-showcase" delay={.22}>{showcase.map(([src, alt], index) => <figure key={src} className={`showcase-card showcase-${index + 1}`}><img src={src} alt={alt} /><figcaption>{alt}</figcaption></figure>)}</Reveal>
+    </div>
+  </section>;
 }
 
 function WorkCard({ workKey, icon: Icon, tags, title, copy, onOpen }) {
@@ -62,7 +80,7 @@ function WorkCard({ workKey, icon: Icon, tags, title, copy, onOpen }) {
 }
 
 function Works({ onOpen }) {
-  return <section id="works" className="works section-video"><FadingVideo src="/media/capabilities.mp4" /><div className="works-inner"><Reveal className="works-title"><p>// Selected Works</p><h2><BlurText>设计</BlurText><br /><BlurText delay={.15}>服务价值</BlurText></h2></Reveal><div className="work-grid"><WorkCard workKey="detail" icon={FileText} tags={["卖点梳理", "视觉叙事", "长页设计", "科技表达"]} title="净水科技表达" copy="把流量、过滤与使用体验，转化为容易理解的视觉内容。" onOpen={onOpen} /><WorkCard workKey="daily" icon={Layers3} tags={["品牌形象", "品类导航", "商品层级", "日常运营"]} title="日常净水首页" copy="组织品牌、权益、品类与主销商品，建立清楚的导购路径。" onOpen={onOpen} /><WorkCard workKey="campaign" icon={Sparkles} tags={["大促氛围", "优惠层级", "商品矩阵", "活动视觉"]} title="双11分会场" copy="在高密度促销信息中，保持活动氛围与阅读顺序。" onOpen={onOpen} /></div></div></section>;
+  return <section id="works" className="works"><div className="works-inner"><Reveal className="works-title"><p>精选海尔项目</p><h2><BlurText>从思考</BlurText><br /><BlurText delay={.15}>走到画面</BlurText></h2><span>详情页与两套分会场完整拆解，展示策划、AI探索和商业落地能力。</span></Reveal><div className="work-grid"><WorkCard workKey="detail" icon={FileText} tags={["卖点梳理", "视觉叙事", "长页设计", "科技表达"]} title="净水科技表达" copy="把流量、过滤与使用体验，转化为容易理解的视觉内容。" onOpen={onOpen} /><WorkCard workKey="daily" icon={Layers3} tags={["品牌形象", "品类导航", "商品层级", "日常运营"]} title="日常净水首页" copy="组织品牌、权益、品类与主销商品，建立清楚的导购路径。" onOpen={onOpen} /><WorkCard workKey="campaign" icon={Sparkles} tags={["大促氛围", "优惠层级", "商品矩阵", "活动视觉"]} title="双11分会场" copy="在高密度促销信息中，保持活动氛围与阅读顺序。" onOpen={onOpen} /></div></div></section>;
 }
 
 const cases = [
@@ -155,6 +173,6 @@ export function App() {
   const [lightbox, setLightbox] = useState(null);
   const openImage = (src, title) => setLightbox({ src, title });
   const openCase = key => document.getElementById(`case-${key}`)?.scrollIntoView({ behavior: "smooth" });
-  return <><main><Hero /><About /><Works onOpen={openCase} /><ProcessAndCases onImage={openImage} /><Gallery onImage={openImage} /></main><Lightbox state={lightbox} onClose={() => setLightbox(null)} /></>;
+  return <><main><Hero /><Works onOpen={openCase} /><ProcessAndCases onImage={openImage} /><Gallery onImage={openImage} /><About /></main><Lightbox state={lightbox} onClose={() => setLightbox(null)} /></>;
 }
 
